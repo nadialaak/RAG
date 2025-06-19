@@ -1,0 +1,9 @@
+transformers
+sentence-transformers
+chromadb
+PyPDF2
+langchain
+torch
+scikit-learn
+numpy
+requests
