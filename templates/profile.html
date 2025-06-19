@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[calc(100vh-160px)]">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Votre Profil</h2>
+
+        <form id="profileForm" action="{{ url_for('update_profile') }}" method="POST">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Identifiant:</label>
+                <div id="username" class="shadow-sm border rounded-md w-full py-3 px-4 text-gray-700 bg-gray-100 leading-tight" aria-describedby="username-help">
+                    {{ user.username }}
+                </div>
+                <p id="username-help" class="text-xs text-gray-500 mt-1">L'Identifiant ne peut pas être modifié.</p>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email or '' }}" required
+                       class="shadow-sm appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                       placeholder="your@example.com" aria-describedby="email-help">
+                <p id="email-help" class="text-xs text-gray-500 mt-1">Veuillez saisir une adresse email valide.</p>
+            </div>
+            <div class="mb-4">
+                <label for="full_name" class="block text-gray-700 text-sm font-semibold mb-2">Full Name:</label>
+                <input type="text" id="full_name" name="full_name" value="{{ user.full_name or '' }}"
+                       class="shadow-sm appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                       placeholder="Your Full Name" aria-describedby="full-name-help">
+                <p id="full-name-help" class="text-xs text-gray-500 mt-1">Optionnel : saisissez votre nom complet.</p>
+            </div>
+            <div class="mb-4">
+                <label for="new_password" class="block text-gray-700 text-sm font-semibold mb-2">Nouveau mot de passe:</label>
+                <input type="password" id="new_password" name="new_password"
+                       class="shadow-sm appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                       placeholder="Enter new password" aria-describedby="new-password-help">
+                <p id="new-password-help" class="text-xs text-gray-500 mt-1">Laissez vide si vous ne souhaitez pas changer votre mot de passe.
+
+</p>
+            </div>
+            <div class="mb-6 hidden" id="current_password_div">
+                <label for="current_password" class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe actuel :</label>
+                <input type="password" id="current_password" name="current_password"
+                       class="shadow-sm appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                       placeholder="Enter current password" aria-describedby="current-password-help">
+                <p id="current-password-help" class="text-xs text-gray-500 mt-1">Champ obligatoire pour modifier votre mot de passe.</p>
+            </div>
+            <div class="flex items-center justify-center">
+                <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-md shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+                    Mettre à jour le profil
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Show/hide current password field based on new password input
+    document.addEventListener('DOMContentLoaded', function() {
+        const newPasswordField = document.getElementById('new_password');
+        const currentPasswordFieldDiv = document.getElementById('current_password_div');
+        const currentPasswordField = document.getElementById('current_password');
+
+        newPasswordField.addEventListener('input', function() {
+            if (newPasswordField.value.length > 0) {
+                currentPasswordFieldDiv.classList.remove('hidden');
+                currentPasswordField.setAttribute('required', 'required');
+            } else {
+                currentPasswordFieldDiv.classList.add('hidden');
+                currentPasswordField.removeAttribute('required');
+                currentPasswordField.value = '';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RAG Chatbot{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font from Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Scrollbar styling for chat area */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #bbb;
+            border-radius: 6px;
+        }
+
+        /* Flash message animation & styling */
+        .flash-message {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.4s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flash-message.hidden {
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .flash-message.success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .flash-message.info {
+            background-color: #e0f2fe;
+            color: #075985;
+            border: 1px solid #bae6fd;
+        }
+
+        .flash-message.warning {
+            background-color: #fef9c3;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .flash-message.danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+{% block scripts %}{% endblock %}
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="bg-white shadow-sm py-4 px-6">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold text-gray-800 hover:text-blue-600 transition">Conseiller Intelligent</a>
+            <div class="flex items-center gap-4">
+                {% if session.get('user_id') %}
+                    <span class="text-gray-700">Bonjour, <span class="font-semibold">{{ session.get('username') }}</span></span>
+                    <a href="{{ url_for('chat_page') }}" class="text-gray-600 hover:text-blue-500 transition font-medium">Chat</a>
+                    <a href="{{ url_for('profile_page') }}" class="text-gray-600 hover:text-blue-500 transition font-medium">Profil</a>
+                    <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md shadow-sm transition">Déconnexion</a>
+                {% else %}
+                    <a href="{{ url_for('auth') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md shadow-sm transition">Connexion / Inscription</a>
+                {% endif %}
+            </div>
