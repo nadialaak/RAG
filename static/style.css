@@ -1,0 +1,52 @@
+/* Custom chat message styles */
+.message-bubble {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    line-height: 1.4;
+}
+
+.user-message {
+    background-color: #10B981; /* Emerald-500 */
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 6px;
+}
+
+.bot-message {
+    background-color: #F3F4F6; /* Gray-100 */
+    color: #111827; /* Gray-900 */
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* Conversation sidebar styles */
+#conversation-list div {
+    transition: background-color 0.2s, transform 0.1s;
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+#conversation-list div:hover {
+    background-color: #E5E7EB; /* Gray-200 */
+    transform: translateX(2px);
+}
+
+#conversation-list div.bg-gray-200 {
+    background-color: #D1D5DB; /* Gray-300 */
+    font-weight: 500;
+}
