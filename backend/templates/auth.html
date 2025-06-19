@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion / Inscription{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[calc(100vh-160px)] bg-gray-50 px-4">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Connexion / Inscription</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <span>{{ message }}</span>
+                        <button onclick="this.closest('.flash-message').classList.add('hidden')" class="text-xl font-bold text-gray-500 hover:text-gray-800 transition" aria-label="Fermer">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Toggle between Login and Register -->
+        <div class="flex justify-center mb-8">
+            <button id="showLogin"
+                    class="px-5 py-2 text-sm font-medium border border-gray-300 rounded-l-md focus:outline-none transition-colors duration-200
+                    {% if not request.args.get('mode') or request.args.get('mode') != 'register' %}bg-blue-500 text-white{% else %}bg-gray-100 text-gray-700{% endif %}">
+                Connexion
+            </button>
+            <button id="showRegister"
+                    class="px-5 py-2 text-sm font-medium border border-gray-300 border-l-0 rounded-r-md focus:outline-none transition-colors duration-200
+                    {% if request.args.get('mode') == 'register' %}bg-blue-500 text-white{% else %}bg-gray-100 text-gray-700{% endif %}">
+                Inscription
+            </button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" action="{{ url_for('login') }}" method="POST" class="{% if request.args.get('mode') == 'register' %}hidden{% endif %}">
+            <div class="mb-5">
+                <label for="login_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="login_email" name="email" required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="mb-6">
+                <label for="login_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                <input type="password" id="login_password" name="password" required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit"
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md shadow-lg transition">
+                    Connexion
+                </button>
+            </div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" action="{{ url_for('register') }}" method="POST" class="{% if request.args.get('mode') != 'register' %}hidden{% endif %}">
+            <div class="mb-4">
+                <label for="register_username" class="block text-sm font-medium text-gray-700 mb-1">Identifiant</label>
+                <input type="text" id="register_username" name="username" required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="mb-4">
+                <label for="register_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="register_email" name="email" required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="mb-4">
+                <label for="register_full_name" class="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                <input type="text" id="register_full_name" name="full_name"
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="mb-6">
+                <label for="register_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                <input type="password" id="register_password" name="password" required
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit"
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md shadow-lg transition">
+                    Inscription
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const showLogin = document.getElementById('showLogin');
+    const showRegister = document.getElementById('showRegister');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    if (showLogin && showRegister && loginForm && registerForm) {
+        showLogin.addEventListener('click', function () {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            this.classList.add('bg-blue-500', 'text-white');
+            showRegister.classList.remove('bg-blue-500', 'text-white');
+            showRegister.classList.add('bg-gray-100', 'text-gray-700');
+            window.history.pushState({}, '', '{{ url_for('auth') }}');
+        });
+
+        showRegister.addEventListener('click', function () {
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            this.classList.add('bg-blue-500', 'text-white');
+            showLogin.classList.remove('bg-blue-500', 'text-white');
+            showLogin.classList.add('bg-gray-100', 'text-gray-700');
+            window.history.pushState({}, '', '{{ url_for('auth', mode='register') }}');
+        });
+    } else {
+        console.error('Un ou plusieurs éléments DOM sont introuvables.');
+    }
+});
+</script>
+
+{% endblock %}
